@@ -1,0 +1,29 @@
+# Variáveis de ambiente
+.env
+
+# Dependências (Node.js)
+node_modules/
+
+# Logs
+*.log
+
+# BAT
+*.bat
+
+# Query
+*.sql
+
+# Build
+dist/
+build/
+
+# Arquivos temporários
+*.tmp
+*.swp
+*.bak
+
+# IDEs / editores
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
