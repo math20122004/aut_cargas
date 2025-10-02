@@ -1,23 +1,29 @@
+# Ambiente virtual
+venv/
+.env/
+.venv/
+env/
+
+# Dependências (Node.js - caso esteja usando)
+node_modules/
+
 # Variáveis de ambiente
 .env
-
-# Dependências (Node.js)
-node_modules/
 
 # Logs
 *.log
 
-# BAT
+# Scripts de terminal (se necessário manter)
 *.bat
+*.sh
 
-venv/
-
-# Query
+# Arquivos de queries SQL
 *.sql
 
-# Build
-dist/
+# Build (pacotes e distribuições Python)
 build/
+dist/
+*.egg-info/
 
 # Arquivos temporários
 *.tmp
@@ -29,3 +35,5 @@ build/
 .idea/
 *.sublime-project
 *.sublime-workspace
+__pycache__/
+*.pyc
