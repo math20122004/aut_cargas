@@ -35,8 +35,8 @@ def return_queys() -> list:
         thread = threading.Thread(target=perguntar_com_timeout, args=(resposta_queue,))
         thread.start()
 
-        # Espera até 10 segundos pela resposta
-        thread.join(timeout=10)
+        # Espera até 30 segundos pela resposta
+        thread.join(timeout=30)
 
         if thread.is_alive():
             logging.warning("Sem resposta do usuário dentro do tempo. Executando padrão.")
