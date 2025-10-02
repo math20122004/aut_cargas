@@ -10,7 +10,7 @@ node_modules/
 # BAT
 *.bat
 
-ven/
+venv/
 
 # Query
 *.sql
