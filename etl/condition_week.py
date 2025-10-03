@@ -64,7 +64,7 @@ def return_queys() -> list:
                 carga_week.append(CARGA_AUT_3)
 
             if day_number == 2:
-                carga_week.append(CARGA_DAC)
+                carga_week.append(CARGA_DAC_2)
 
             if day_number == 17:
                 carga_week.append(CARGA_DAC)
@@ -72,7 +72,8 @@ def return_queys() -> list:
         elif day_week in ["Tuesday", "Wednesday", "Thursday", "Friday"]:
             carga_week.extend([
                 CARGA_LOT,
-                CARGA_USUARIO
+                CARGA_USUARIO,
+                CARGA_DAC_2
             ])
 
             if resp and resp.strip().upper() in ['S', 'SIM']:

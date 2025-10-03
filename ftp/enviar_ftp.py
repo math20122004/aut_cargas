@@ -3,9 +3,10 @@ import sys
 from ftplib import FTP
 import paramiko
 from dotenv import load_dotenv
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from etl.utils import get_output_path as ge
+
+# Adiciona o diretório pai ao sys.path para importar utilitários
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 load_dotenv()
 
@@ -15,6 +16,7 @@ def enviar_arquivos():
     caminho_chave_privada = os.getenv('CAMINHO_CHAVE_PRIVADA')
     senha_chave = os.getenv('SENHA_CHAVE_PRIVADA')
     pasta_remota = os.getenv('PASTA_REMOTA')
+    pasta_remota_dac = os.getenv('PASTA_REMOTA_DAC')
 
     caminho_local = ge()
 
@@ -23,6 +25,7 @@ def enviar_arquivos():
         return
 
     try:
+        # Conecta via SFTP
         key = paramiko.RSAKey.from_private_key_file(caminho_chave_privada, password=senha_chave)
         transport = paramiko.Transport((servidor, 22))
         transport.connect(username=usuario, pkey=key)
@@ -30,21 +33,30 @@ def enviar_arquivos():
 
         print(f"[OK] Conectado ao SFTP: {servidor}")
 
-        try:
-            sftp.chdir(pasta_remota)
-            print(f"[OK] Acessando pasta remota: {pasta_remota}")
-        except IOError:
-            print(f"[ERRO] Pasta remota '{pasta_remota}' não encontrada.")
-            sftp.close()
-            return
-
         arquivos_enviados = 0
+
         for arquivo in os.listdir(caminho_local):
             caminho_arquivo = os.path.join(caminho_local, arquivo)
-            if os.path.isfile(caminho_arquivo):
-                sftp.put(caminho_arquivo, arquivo)
-                print(f"[OK] Enviado: {arquivo}")
-                arquivos_enviados += 1
+
+            if not os.path.isfile(caminho_arquivo):
+                continue  # Pula se não for arquivo
+
+            # Define a pasta remota com base no nome do arquivo
+            if arquivo.startswith('DAC'):
+                pasta_destino = pasta_remota_dac
+            else:
+                pasta_destino = pasta_remota
+
+            try:
+                sftp.chdir(pasta_destino)
+            except IOError:
+                print(f"[ERRO] Pasta remota '{pasta_destino}' não encontrada.")
+                continue
+
+            # Envia o arquivo
+            sftp.put(caminho_arquivo, arquivo)
+            arquivos_enviados += 1
+            print(f"[OK] Enviado: {arquivo} → {pasta_destino}")
 
         sftp.close()
         transport.close()
